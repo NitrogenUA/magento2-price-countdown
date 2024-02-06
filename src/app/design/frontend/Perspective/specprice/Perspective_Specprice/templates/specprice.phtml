@@ -1,0 +1,13 @@
+<?php
+/**
+ * @var $block Perspective\Specprice\Block\Specprice
+ */
+?>
+
+<?php
+$specialPriceEndDate = $block->getSpecialPriceEndDate();
+if ($specialPriceEndDate):
+?>
+<p><h3><?= $block->priceRule ?></h3></p>
+<div><h1 id="specprice" data-mage-init='{"Perspective_Specprice/js/specprice": {"date": "<?= $specialPriceEndDate->setTimezone(new DateTimeZone("UTC"))->format('c') ?>"}}'></h1></div>
+<?php endif; ?>
