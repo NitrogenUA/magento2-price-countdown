@@ -19,6 +19,11 @@ class Specprice extends \Magento\Framework\View\Element\Template
     protected $_coreRegistry = null;
 
     /**
+     * @var RuleFactory
+     */
+    protected $_ruleFactory;
+
+    /**
      * Locale Date/Timezone
      * @var \Magento\Framework\Stdlib\DateTime\TimezoneInterface
      */
@@ -31,14 +36,17 @@ class Specprice extends \Magento\Framework\View\Element\Template
     /**
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Framework\Registry $registry
+     * @param RuleFactory $ruleFactory
      * @param array $data
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
         \Magento\Framework\Registry $registry,
+        \Magento\CatalogRule\Model\RuleFactory $ruleFactory,
         array $data = []
     ) {
         $this->_coreRegistry = $registry;
+        $this->_ruleFactory = $ruleFactory;
         $this->_timezone = $context->getLocaleDate();
         parent::__construct($context, $data);
     }
@@ -82,8 +90,7 @@ class Specprice extends \Magento\Framework\View\Element\Template
         if (isset($this->specialPriceEndDate)) $this->priceRule = "Product special price";
 
         // Retrive a collection of all active catalog price rules
-        $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
-        $catalogRules = $objectManager->create('Magento\CatalogRule\Model\RuleFactory')
+        $catalogRules = $this->_ruleFactory
                             ->create()
                             ->getCollection()
                             ->addIsActiveFilter();
